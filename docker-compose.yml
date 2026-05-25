@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: switchtosolar-ai-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: switchtosolar_ai_ops
+      POSTGRES_USER: s2s_ai_user
+      POSTGRES_PASSWORD: s2s_ai_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - s2s_ai_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  s2s_ai_postgres_data:
