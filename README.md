@@ -142,36 +142,6 @@ Operational retrieval workflows avoid unrestricted AI-generated database executi
 
 ---
 
-## API Endpoint
-
-### POST /query
-
-Example request:
-
-```json
-{
-  "question": "How does the retrieval pipeline work?",
-  "top_k": 3
-}
-Response:
-
-{
-"question": "...",
-"answer": "...",
-"intent": "knowledge",
-"sources": [...],
-"metadata": {
-"request_id": "...",
-"model": "...",
-"chunks_used": 3,
-"latency_ms": 4000,
-"retrieval_confidence": "high",
-"best_distance": 0.91
-}
-}
-
----
-
 Tech Stack
 
 - FastAPI (Python backend)
@@ -187,8 +157,6 @@ Key Concepts Implemented
 - Intent routing
 - AI observability (logging + latency tracking)
 - Retrieval confidence scoring
-
-
 
 How to run Locally?
 
@@ -241,4 +209,34 @@ Each query logs:
 
 - best_distance → closest semantic match
 - retrieval_confidence → high / medium / low
+
+## API Endpoint
+
+### POST /query
+
+Example request:
+
+```json
+{
+  "question": "How does the retrieval pipeline work?",
+  "top_k": 3
+}
+Response:
+
+{
+"question": "...",
+"answer": "...",
+"intent": "knowledge",
+"sources": [...],
+"metadata": {
+"request_id": "...",
+"model": "...",
+"chunks_used": 3,
+"latency_ms": 4000,
+"retrieval_confidence": "high",
+"best_distance": 0.91
+}
+}
+
+---
 ```
