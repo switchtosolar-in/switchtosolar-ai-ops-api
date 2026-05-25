@@ -1,6 +1,6 @@
 # switchtosolar-ai-ops-api
 
-🔷 Title
+Title
 
 # SwitchToSolar AI Ops API
 
@@ -8,9 +8,9 @@ A production-style Retrieval-Augmented Generation (RAG) backend built using Fast
 
 This system powers intelligent, context-aware AI responses for the SwitchToSolar platform.
 
-🔷 What this project does
+What this project does?
 
-## 🚀 Features
+## Features
 
 - Semantic search over knowledge base using vector embeddings
 - Context-grounded AI responses (no hallucination design)
@@ -18,9 +18,10 @@ This system powers intelligent, context-aware AI responses for the SwitchToSolar
 - Retrieval confidence scoring
 - Query observability (latency, model usage, logs)
 - Production-style API with validation and error handling
-  🔷 Architecture
 
-## 🧠 Architecture Overview
+Architecture
+
+## Architecture Overview
 
 User Query
 → Intent Router
@@ -29,9 +30,10 @@ User Query
 → LLM (OpenAI)
 → Structured Response (answer + sources + metadata)
 → Query Logging (PostgreSQL)
-🔷 API Endpoints
 
-## 🔌 API Endpoints
+API Endpoints
+
+## API Endpoints
 
 ### POST /query
 
@@ -60,14 +62,14 @@ Response:
 
 ---
 
-🔷 Tech Stack
+Tech Stack
 
 - FastAPI (Python backend)
 - PostgreSQL + pgvector (vector database)
 - OpenAI API (LLM + embeddings)
 - Docker (local DB setup)
 
-🔷 Key Concepts Implemented
+Key Concepts Implemented
 
 - Retrieval-Augmented Generation (RAG)
 - Vector similarity search
@@ -76,7 +78,7 @@ Response:
 - AI observability (logging + latency tracking)
 - Retrieval confidence scoring
 
-🔷 How to run Locally
+How to run Locally?
 
 1. Start PostgreSQL:
 
