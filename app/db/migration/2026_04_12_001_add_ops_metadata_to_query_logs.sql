@@ -1,0 +1,6 @@
+ALTER TABLE query_logs
+ADD COLUMN IF NOT EXISTS data_source TEXT;
+ALTER TABLE query_logs
+ADD COLUMN IF NOT EXISTS operation_tool TEXT;
+ALTER TABLE query_logs
+ADD COLUMN IF NOT EXISTS operation_data JSONB;
