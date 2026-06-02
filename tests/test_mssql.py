@@ -12,5 +12,4 @@ cursor.execute("SELECT DB_NAME() AS db_name, SYSUTCDATETIME() AS now_utc;")
 row = cursor.fetchone()
 
 print("CONNECTED:", row.db_name, row.now_utc)
-
 conn.close()
