@@ -1,3 +1,17 @@
+"""
+FastAPI application entrypoint for the AI Ops service.
+
+This file wires together the main API routers:
+
+- health checks
+- document ingestion / management
+- AI query execution
+- analytics
+
+The route mounting stays centralized here while workflow logic remains
+inside dedicated route, service, and repository layers.
+"""
+
 from fastapi import FastAPI
 
 from app.api.routes.health import router as health_router

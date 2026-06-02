@@ -1,3 +1,20 @@
+"""
+Operational data repository for AI Ops tools.
+
+This file provides predefined read-only MSSQL queries used by the
+operational AI workflow.
+
+Operational question
+  -> allowed tool
+  -> repository function
+  -> controlled SQL query
+  -> structured result
+
+The AI system does not generate SQL directly. Each operational capability
+is exposed through an approved repository function to keep data access
+predictable, auditable, and easier to debug.
+"""
+
 from app.db.mssql import get_mssql_connection
 
 
@@ -153,6 +170,8 @@ def get_lead_status_summary(days: int = 30) -> list[dict]:
         }
         for row in rows
     ]
+
+
 
 
 def get_report_activity_summary(days: int = 30) -> dict:

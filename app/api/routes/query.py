@@ -1,3 +1,18 @@
+"""
+Query API routes for the AI Ops service.
+
+This file exposes the main question-answering endpoint and debugging
+preview endpoints.
+
+Request
+  -> FastAPI route
+  -> RAG orchestration service
+  -> response with answer, sources, and metadata
+
+The route layer stays intentionally thin. Retrieval, prompt construction,
+LLM execution, operations handling, and logging are delegated to services.
+"""
+
 from fastapi import APIRouter
 from pydantic import BaseModel
 
@@ -29,24 +44,30 @@ def query(payload: QueryRequest):
 
 @router.post("/retrieval-preview")
 def retrieval_preview(payload: RetrievalPreviewRequest):
-    chunks = retrieve_relevant_chunks(
+    retrieval_result = retrieve_relevant_chunks(
         question=payload.question,
         top_k=payload.top_k,
     )
 
+    chunks = retrieval_result["chunks"]
+
     return {
         "question": payload.question,
         "chunks_found": len(chunks),
+        "confidence": retrieval_result["confidence"],
+        "best_distance": retrieval_result["best_distance"],
         "chunks": chunks,
     }
 
 
 @router.post("/prompt-preview")
 def prompt_preview(payload: RetrievalPreviewRequest):
-    chunks = retrieve_relevant_chunks(
+    retrieval_result = retrieve_relevant_chunks(
         question=payload.question,
         top_k=payload.top_k,
     )
+
+    chunks = retrieval_result["chunks"]
 
     prompt = build_prompt(
         question=payload.question,
@@ -56,5 +77,7 @@ def prompt_preview(payload: RetrievalPreviewRequest):
     return {
         "question": payload.question,
         "chunks_found": len(chunks),
+        "confidence": retrieval_result["confidence"],
+        "best_distance": retrieval_result["best_distance"],
         "prompt": prompt,
     }

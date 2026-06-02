@@ -1,3 +1,19 @@
+"""
+Semantic retrieval service for the RAG pipeline.
+
+This file owns the retrieval step of the AI workflow:
+
+User/Admin question
+  -> embedding generation
+  -> pgvector similarity search
+  -> confidence scoring
+  -> filtered context chunks
+
+It does not build prompts or call the LLM. Its responsibility is to return
+the most relevant knowledge chunks and retrieval metadata for downstream
+RAG orchestration.
+"""
+
 from app.db.postgres import get_connection
 from app.services.embedding_service import create_embedding
 

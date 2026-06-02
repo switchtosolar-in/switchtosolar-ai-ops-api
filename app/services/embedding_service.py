@@ -1,3 +1,17 @@
+"""
+Embedding service for semantic retrieval.
+
+This file converts text into vector embeddings used by the RAG pipeline.
+
+Text input
+  -> OpenAI embedding model
+  -> vector representation
+  -> pgvector similarity search
+
+The service is intentionally small so embedding generation stays isolated
+from retrieval, prompt construction, and LLM response generation.
+"""
+
 from openai import OpenAI
 
 from app.core.config import settings

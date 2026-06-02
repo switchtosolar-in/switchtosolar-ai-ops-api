@@ -1,3 +1,15 @@
+"""
+Query log repository for AI Ops observability.
+
+This file records metadata for AI Ops requests, including RAG queries,
+operational tool usage, latency, model information, retrieval metadata,
+and error states.
+
+The goal is to make AI behavior traceable instead of treating responses
+as one-off model outputs.
+"""
+
+
 import json
 from typing import Any
 

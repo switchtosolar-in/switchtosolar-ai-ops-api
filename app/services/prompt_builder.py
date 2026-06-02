@@ -1,3 +1,19 @@
+"""
+Prompt builder for retrieval-grounded AI responses.
+
+This file converts retrieved knowledge chunks into a structured prompt:
+
+Retrieved chunks
+  -> formatted context
+  -> source references
+  -> system instructions
+  -> user prompt for LLM execution
+
+The prompt explicitly instructs the model to answer only from provided
+context and include source references, which helps reduce unsupported
+or fabricated responses.
+"""
+
 from typing import List, Dict
 
 

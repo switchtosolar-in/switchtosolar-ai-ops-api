@@ -1,242 +1,228 @@
 # SwitchToSolar AI Ops API
 
-Production-oriented Retrieval-Augmented Generation (RAG) backend built using FastAPI, PostgreSQL (pgvector), and OpenAI APIs.
+SwitchToSolar AI Ops API is a FastAPI-based backend service for retrieval-grounded AI workflows, semantic search, operational AI tooling, and AI observability.
 
-This system powers context-aware AI workflows and operational AI services for the SwitchToSolar platform through retrieval-driven architectures, structured orchestration pipelines, and grounded response generation.
+It is part of the SwitchToSolar platform and is designed as a dedicated AI systems layer separate from the main product backend. The service handles knowledge retrieval, intent routing, prompt construction, LLM execution, and query logging for internal AI-assisted workflows.
 
 ---
 
-## Overview
+## Purpose
 
-The platform is designed around operational AI workflow patterns emphasizing:
+This project focuses on the backend systems required to make AI workflows more grounded, observable, and operationally useful beyond a simple prompt-response integration.
 
-- retrieval-driven AI architectures
-- grounded response generation
-- structured prompt orchestration
-- operational safety controls
-- observability and telemetry
-- backend AI workflow separation
-- controlled operational retrieval patterns
+The main goals are:
 
-The system combines semantic retrieval pipelines with modular AI orchestration services to support AI-assisted platform workflows.
+- Retrieve relevant platform knowledge before generating answers
+- Separate knowledge questions from operational questions
+- Keep AI workflows routed through controlled backend services
+- Capture metadata for debugging, evaluation, and observability
+- Support future operational AI tooling without exposing unrestricted database access
 
 ---
 
 ## Core Capabilities
 
-- Semantic retrieval using vector embeddings
-- Context-grounded AI response generation
-- Structured prompt orchestration
-- Retrieval confidence scoring
-- Intent routing and workflow classification
-- Operational AI workflow handling
-- AI observability and telemetry logging
-- Structured response metadata
-- Backend AI service isolation
-- Validation and reliability controls
+- Retrieval-Augmented Generation (RAG)
+- Semantic retrieval using PostgreSQL + pgvector
+- Knowledge base ingestion and chunk retrieval
+- Intent routing for knowledge, operations, and unsupported questions
+- Prompt construction using retrieved context
+- OpenAI API integration
+- Query logging and response metadata
+- Operational AI workflow foundation
+- FastAPI route separation
+- Repository-based data access patterns
 
 ---
 
 ## Architecture Overview
 
-User Query
-→ Intent Router
-→ Retrieval Pipeline
-→ Context Construction
-→ Prompt Orchestration
-→ LLM Execution
-→ Structured Response Generation
-→ Observability & Query Logging
-
-The architecture separates:
-
-- vector-based semantic retrieval
-- operational workflow handling
-- prompt orchestration
-- runtime validation
-- telemetry collection
-
-to improve reliability, maintainability, and operational safety.
-
----
-
-## Retrieval Pipeline
-
-The retrieval layer uses PostgreSQL with pgvector for semantic similarity search.
-
-Pipeline stages include:
-
-1. Document ingestion
-2. Chunking and preprocessing
-3. Embedding generation
-4. Vector similarity retrieval
-5. Confidence filtering
-6. Context injection into prompts
-7. Source-grounded response generation
-
-The system is designed to prioritize grounded responses over open-ended generation.
+```text
+Admin / Platform Question
+        |
+        v
+FastAPI Query Endpoint
+        |
+        v
+Intent Router
+        |
+        +--------------------+--------------------+
+        |                    |                    |
+        v                    v                    v
+Knowledge Query       Operational Query     Unsupported Query
+        |                    |                    |
+        v                    v                    v
+RAG Pipeline          Controlled Tools       Safe Response
+        |                    |
+        v                    v
+PostgreSQL + pgvector  Repository Layer
+        |                    |
+        +---------+----------+
+                  |
+                  v
+Prompt Builder
+                  |
+                  v
+OpenAI API
+                  |
+                  v
+Response + Sources + Metadata
+                  |
+                  v
+Query Logging / Observability
+```
 
 ---
 
-## Intent Routing
+## RAG Pipeline
 
-Requests are classified into workflow categories prior to LLM execution.
+The RAG pipeline is used for knowledge-based questions about the SwitchToSolar platform.
 
-Supported workflow types:
+Flow:
 
-- knowledge retrieval
-- operational workflows
-- unsupported requests
+1. A question is received by the FastAPI query endpoint.
+2. The intent router classifies the question.
+3. Knowledge questions are routed into the retrieval pipeline.
+4. The question is converted into an embedding.
+5. PostgreSQL + pgvector retrieves semantically relevant chunks.
+6. Retrieved chunks are passed into the prompt builder.
+7. The LLM generates a grounded response using retrieved context.
+8. The response returns with sources and metadata.
+9. Query metadata is logged for observability.
 
-This routing layer helps isolate workflow behavior and prevents uncontrolled execution paths.
-
----
-
-## AI Workflow Design
-
-The platform uses structured orchestration pipelines combining:
-
-- retrieval context
-- scoped prompting
-- response validation
-- fallback handling
-- timeout controls
-- telemetry collection
-
-The architecture emphasizes predictable AI workflow behavior and operational visibility.
+The documents used for retrieval are stored in the `knowledge_base/` directory.
 
 ---
 
-## Observability & Telemetry
+## Operational AI Design
 
-The platform captures operational metadata for AI workflow monitoring and diagnostics.
+The system is designed to support operational AI workflows without giving the model unrestricted database access.
 
-Tracked metadata includes:
+Operational questions are routed through controlled service and repository layers instead of allowing AI-generated SQL.
 
-- request identifiers
-- workflow intent
-- latency metrics
-- retrieval metadata
-- model usage
-- confidence scoring
-- response diagnostics
-- execution status
+This design supports:
 
-This telemetry layer supports debugging, evaluation workflows, and iterative refinement.
+- Predictable execution
+- Safer data access
+- Clearer auditability
+- Easier debugging
+- Separation between AI reasoning and data retrieval
 
 ---
-
-## Reliability & Safety Controls
-
-The system includes multiple operational safeguards:
-
-- retrieval-grounded prompting
-- controlled execution paths
-- fallback response handling
-- timeout management
-- scoped workflow routing
-- structured validation patterns
-- protected backend service integration
-
-Operational retrieval workflows avoid unrestricted AI-generated database execution patterns.
-
----
-
-Tech Stack
-
-- FastAPI (Python backend)
-- PostgreSQL + pgvector (vector database)
-- OpenAI API (LLM + embeddings)
-- Docker (local DB setup)
-
-Key Concepts Implemented
-
-- Retrieval-Augmented Generation (RAG)
-- Vector similarity search
-- Prompt grounding
-- Intent routing
-- AI observability (logging + latency tracking)
-- Retrieval confidence scoring
-
-How to run Locally?
-
-1. Start PostgreSQL:
-
-docker-compose up -d
-Activate env:
-.venv\Scripts\activate
-Start API:
-uvicorn app.main:app --reload
-Open docs:
-
-http://127.0.0.1:8000/docs
-
----
-
-# 2. Add Architecture Notes
-
-Create:
-
-docs/architecture.md
-
-# Architecture Deep Dive
-
-## RAG Flow
-
-1. User question converted to embedding
-2. pgvector similarity search returns top_k chunks
-3. Prompt builder injects context into structured prompt
-4. LLM generates grounded response
-5. Response includes sources and metadata
-
-## Intent Routing
-
-- knowledge → RAG pipeline
-- operations → placeholder (future MSSQL tools)
-- unsupported → safe rejection
 
 ## Observability
 
-Each query logs:
+The API captures metadata that helps inspect and debug AI behavior.
 
-- request_id
-- intent
-- model_used
-- latency_ms
-- status
+Examples of tracked metadata include:
 
-## Retrieval Quality
+- Request ID
+- Intent type
+- Retrieved chunks
+- Similarity scores
+- Model used
+- Latency
+- Operation tool
+- Response status
+- Error state
 
-- best_distance → closest semantic match
-- retrieval_confidence → high / medium / low
-
-## API Endpoint
-
-### POST /query
-
-Example request:
-
-```json
-{
-  "question": "How does the retrieval pipeline work?",
-  "top_k": 3
-}
-Response:
-
-{
-"question": "...",
-"answer": "...",
-"intent": "knowledge",
-"sources": [...],
-"metadata": {
-"request_id": "...",
-"model": "...",
-"chunks_used": 3,
-"latency_ms": 4000,
-"retrieval_confidence": "high",
-"best_distance": 0.91
-}
-}
+This makes the AI workflow easier to monitor and improve over time.
 
 ---
+
+## Repository Structure
+
+```text
+app/
+├── api/routes/          # FastAPI route handlers for query, documents, analytics, and health checks
+├── services/            # Core AI workflow logic: RAG, retrieval, embeddings, routing, prompts, and LLM calls
+├── repositories/        # Database access layer for documents, query logs, analytics, and operations
+├── schemas/             # Request and response models
+├── db/                  # PostgreSQL, pgvector, and MSSQL connection logic
+├── core/                # Configuration and shared error handling
+├── utils/               # Shared helper utilities
+└── main.py              # FastAPI application entrypoint
+
+knowledge_base/
+├── ai-advisor-design.md
+├── ai-explainer-design.md
+├── azure-architecture.md
+├── lead-workflow.md
+└── switchtosolar-overview.md
+
+tests/
+└── Python tests for operational logic and service behavior
 ```
+
+---
+
+## Tech Stack
+
+- Python
+- FastAPI
+- PostgreSQL
+- pgvector
+- OpenAI APIs
+- Docker
+- MSSQL integration layer
+- pytest
+
+---
+
+## Running Locally
+
+Start the local PostgreSQL service:
+
+```bash
+docker-compose up -d
+```
+
+Create and activate a virtual environment:
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the FastAPI app:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Open the API documentation:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+## What This Project Demonstrates
+
+This repository demonstrates practical backend AI systems engineering, including:
+
+- RAG architecture
+- Semantic retrieval
+- pgvector-based vector search
+- Prompt orchestration
+- Intent routing
+- Controlled operational AI design
+- AI observability
+- Service/repository separation
+- FastAPI backend design
+- Production-oriented AI workflow patterns
+
+---
+
+## Project Context
+
+This service is part of SwitchToSolar, a rooftop solar platform built to help users understand solar feasibility, generate solar reports, and connect with installers.
+
+The AI Ops API focuses specifically on internal AI workflows, retrieval-grounded platform knowledge, operational assistance, and AI observability.

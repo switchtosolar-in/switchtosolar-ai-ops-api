@@ -1,3 +1,17 @@
+"""
+LLM service for AI Ops response generation.
+
+This file owns the direct chat model call.
+
+Structured prompt
+  -> OpenAI chat model
+  -> generated answer
+  -> model metadata
+
+Keeping this logic isolated makes the RAG orchestration layer cleaner and
+keeps model/provider integration separate from retrieval and logging logic.
+"""
+
 from openai import OpenAI
 
 from app.core.config import settings

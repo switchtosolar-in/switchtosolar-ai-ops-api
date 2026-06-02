@@ -1,3 +1,22 @@
+"""
+RAG and AI Ops orchestration service.
+
+This file coordinates the main AI Ops question-answering workflow:
+
+User/Admin question
+  -> request ID creation
+  -> intent/tool classification
+  -> unsupported response OR operational retrieval OR RAG retrieval
+  -> prompt construction
+  -> LLM execution
+  -> source/metadata formatting
+  -> query logging
+
+This service acts as the workflow coordinator. Lower-level retrieval,
+prompt building, LLM calls, operational data access, and logging are
+delegated to dedicated services and repositories.
+"""
+
 from app.repositories.query_log_repository import insert_query_log
 from app.services.tool_router import classify_tool
 from app.services.retrieval_service import retrieve_relevant_chunks

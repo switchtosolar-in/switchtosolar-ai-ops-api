@@ -1,3 +1,20 @@
+"""
+Operational AI service.
+
+This file maps operational questions to predefined backend tools.
+
+User/Admin question
+  -> routed tool decision
+  -> safe service handler
+  -> repository function
+  -> deterministic operational response
+
+The service intentionally avoids AI-generated SQL. The model may help route
+the question, but live platform data is retrieved only through approved
+repository functions.
+"""
+
+
 import re
 
 from app.repositories.ops_repository import (
@@ -223,7 +240,11 @@ def answer_operations_question(question: str, route_decision: dict | None = None
             "tool": "get_latest_installer",
             "data": {"installer": installer},
         }
-    # 1. Specific summary tools first
+   
+
+   # Fallback keyword routing.
+# This keeps operations usable if the router returns no tool or a low-confidence result.
+
     if "lead status" in normalized or "leads by status" in normalized or "status summary" in normalized:
         days = extract_days(question, default_days=30)
         statuses = get_lead_status_summary(days=days)

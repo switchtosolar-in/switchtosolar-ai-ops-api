@@ -1,3 +1,18 @@
+"""
+Intent and operational tool router for the AI Ops workflow.
+
+This file classifies incoming questions before execution:
+
+User/Admin question
+  -> knowledge workflow
+  -> operations workflow
+  -> unsupported response
+
+For operational questions, the router can only select from an allowed
+tool list. This keeps live platform data access controlled and prevents
+the AI system from inventing tools or generating SQL directly.
+"""
+
 import json
 from openai import OpenAI
 
